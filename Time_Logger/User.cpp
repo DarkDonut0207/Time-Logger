@@ -118,6 +118,7 @@ unsigned int User::studentLogin() {
     cout << "Enter ID: ";
     cin >> ID;
     cout << "Enter Name: \n";
+    cin.ignore();
     getline(cin, name);
     uMapItr = uMap.find(ID);
     if (name == uMapItr->second) {

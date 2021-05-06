@@ -22,7 +22,7 @@ using namespace std;
 int main(int argc, char** argv) {
     Overlay overlay1;
     //overlay1.login();
-    overlay1.runLog();
+    overlay1.login();
     return 0;
 }
 
