@@ -15,6 +15,8 @@
 #include "User.h"
 
 Overlay::Overlay() {
+    ID = 0;
+    user = "\0";
 }
 
 
@@ -23,10 +25,11 @@ Overlay::Overlay() {
 
 Overlay::~Overlay() {
 }
-void Overlay::login() {
+void Overlay::mainMenu() {
     bool cont = true;
     bool isAdmin = false;
     int choice;
+    cout << "***Time Logger Main Menu***\n";
     cout << "(1) Login as Student\n(2) Login as Instructor\n(3)" <<
             " Login as Admininstrator\nInput Choice: ";
     cin >> choice;
@@ -35,19 +38,41 @@ void Overlay::login() {
         cin >> choice;
     }
     if (choice == 1) {
-        do { // Launch user login
-            ID = this->userLoginMenu();
-            if (ID!=0) {
+        do { // Launch student login
+            if (ID==0) {
+                cout << "\n***Student Login Menu***\n" << endl;
+                choice = this->loginMenu();
+                if (choice == 1) {
+                    ID = this->studentLogin();
+                } if (choice == 2) {
+                    cont = false;
+                }
+            } else if (ID!=0) {
                 this->runLog(ID);
-            } else cont = false;
+                cout << "Logging out\n";
+                ID = 0;
+                cont = false;
+            }
         } while (cont);
-
     } else if (choice == 2) {
-        // Launch instructor login
+        do { // Launch instructor login
+            if (user=="\0") {
+                cout << "\n***Instructor Login Menu***\n" << endl;
+                choice = this->loginMenu();
+                if (choice == 1) {
+                    user = this->instructLogin();
+                } if (choice == 2) {
+                    cont = false;
+                }
+            } else if (user!="\0") {
+                
+            }
+        } while (cont);
     } else if (choice == 3) { // Launch admin login
         do {
             if (!isAdmin) {
-                choice = this->adminLoginMenu();
+                cout << "\n***Admin Login Menu***\n" << endl;
+                choice = this->loginMenu();
                 if (choice == 1) {
                     isAdmin = this->adminLogin();
                 } if (choice == 2) {
@@ -57,10 +82,13 @@ void Overlay::login() {
                 choice = this->adminMenu();
                 if (choice == 1) {
                     // View/Edit Students
+                    this->modStuMenu();
                 } else if (choice == 2) {
                     // View/Edit Instructors
+                    this->modInstMenu();
                 } else if (choice == 3) {
                     // View/Edit Classes
+                    this->dispClasses();
                 } else if (choice == 4) {
                    isAdmin = false; // Logout
                 } else if (choice == 5) {
@@ -70,32 +98,12 @@ void Overlay::login() {
         } while (cont);
         
     }
+    this->logPushToF();
+    this->userPushToF();
 }
-/*
-void Overlay::menu() {
-    // Prompt on whether to sign in or sign out
-    cout << "Sign In (1) or Out (2)?";
-    cin >> signIn;
-    while (signIn>2||signIn<1)
-        cin >> signIn;
-    // Prompt for id
-    cout << "Please enter your student ID: ";
-    cin >> ID;
-    // Prompt for date
-    cout << "Log in, input today's month, day, year separated by spaces (3 21 2021):\n";
-    cin >> month >> day >> year;
-    // Prompt for time
-    cout << "Input time hour and minutes separated by space (for PM add 12 to hour):\n";
-    cin >> hour >> min;   
-    // Add onto logger list
-    //log.pushList(ID, month, day, year, hour, min);
-    //log.calcTime("288", 12, 8);
-}  
-  */
 
-int Overlay::adminLoginMenu() {
-    int choice;
-    cout << "\n***Admin Login Menu***\n" << endl;
+int Overlay::loginMenu() {
+    int choice = 2;
     cout << "(1): Login\n";
     cout << "(2): Exit program\n";
     cout << "Enter choice: ";
@@ -107,11 +115,11 @@ int Overlay::adminLoginMenu() {
     return choice;
 }
 int Overlay::adminMenu() {
-    int choice;
+    int choice = 5;
     cout << "\n***Administrator Menu***\n";
-    cout << "(1): View/Edit Students\n";
-    cout << "(2): View/Edit Instructors\n";
-    cout << "(3): View/Edit Classes\n";
+    cout << "(1): View/Edit/Add Students\n";
+    cout << "(2): View/Edit/Add Instructors\n";
+    cout << "(3): View/Edit/Add Classes\n";
     cout << "(4): Logout\n";
     cout << "(5): Exit program\n";
     cout << "Enter choice: ";
@@ -122,7 +130,39 @@ int Overlay::adminMenu() {
     }
     return choice;
 }
-unsigned int Overlay::userLoginMenu() {
-    unsigned int ID = this->studentLogin();
-    return ID;
+void Overlay::modStuMenu() {
+    int choice = 3;
+    do {
+        this->dispStudents();
+        cout << "\n***Modify Student List Menu***\n";
+        cout << "(1): Edit a student\n";
+        cout << "(2): Delete a student\n";
+        cout << "(3): Add a student\n";
+        cout << "(4): Return to Admin Menu\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+        while (choice < 1 || choice > 4) {
+            cout << "This is an invalid choice, re-enter choice: ";
+            cin >> choice;
+        }
+        if (choice != 4) this->modStudents(choice);
+    } while (choice != 4);
+}
+void Overlay::modInstMenu() {
+    int choice = 3;
+    do {
+        this->dispInstructors();
+        cout << "\n***Modify Instructor List Menu***\n";
+        cout << "(1): Edit an instructor\n";
+        cout << "(2): Delete an instructor\n";
+        cout << "(3): Add an instructor\n";
+        cout << "(4): Return to Admin Menu\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+        while (choice < 1 || choice > 4) {
+            cout << "This is an invalid choice, re-enter choice: ";
+            cin >> choice;
+        }
+        if (choice != 4) this->modInstructors(choice);
+    } while (choice != 4);
 }

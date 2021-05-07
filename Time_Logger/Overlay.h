@@ -18,25 +18,19 @@
 #include <iostream>
 #include <string>
 using namespace std;
-class Overlay : public User, public Logger {
+class Overlay : public Logger {
 private:
-    string gClass;
-    short signIn;
     unsigned int ID;
-    short month;
-    short day;
-    short year;
-    short hour;
-    short min;
+    string user;
 public:
     Overlay();
     //Overlay(const Overlay& orig);
     ~Overlay();
-    void login();
-    void menu();
-    int adminLoginMenu();
+    void mainMenu();
+    int loginMenu();
     int adminMenu();
-    unsigned int userLoginMenu();
+    void modStuMenu();
+    void modInstMenu();
 };
 
 #endif /* OVERLAY_H */

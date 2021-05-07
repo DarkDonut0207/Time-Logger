@@ -21,10 +21,10 @@
 using namespace std;
 class User {
 private:
-    map<unsigned int, string> uMap; // A map holding the user id and name
-    map<unsigned int, string>::iterator uMapItr; // Iterator for user map
-    map<unsigned int, string> iMap; // A map holding the instructor id and name
-    map<unsigned int, string>::iterator iMapItr; // Iterator for instructor map
+    map<unsigned int, string> sMap; // A map holding the user id and name
+    map<unsigned int, string>::iterator sMapItr; // Iterator for user map
+    map<string, unsigned int> iMap; // A map holding the instructor name and passcode
+    map<string, unsigned int>::iterator iMapItr; // Iterator for instructor map
     map<string, unsigned int> aMap; // A map holding the admin name and passcode
     map<string, unsigned int>::iterator aMapItr; // Iterator for admin map
     
@@ -35,9 +35,15 @@ public:
     unsigned int PswrdCnvrt(const string&);
     void dispStudents();
     void dispInstructors();
+    void modStudents(int);
+    void modInstructors(int);
+    bool findStudent(unsigned int);
+    bool findInstructor(string);
     bool adminLogin();
     unsigned int studentLogin();
-   
+    string instructLogin();
+    string getStuName(unsigned int);
+    void userPushToF();
 };
 
 #endif /* USER_H */

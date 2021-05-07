@@ -1,0 +1,2 @@
+TestAdmin Password is TestPassword2
+testinstructor@rcc.edu Password is TestPassword

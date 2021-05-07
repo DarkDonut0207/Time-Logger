@@ -21,47 +21,41 @@
 #include <map>
 #include <fstream>
 #include <iterator>
+#include <set>
+#include "User.h"
 using namespace std;
 
 struct Log {
-    unsigned int timeIn;
-    unsigned int timeOut;
-};
-struct StuStruc {
-    unsigned int ID;
-    string sName;
     int logCount;
+    map<unsigned int, unsigned int> intList;
+};
+
+
+struct StuStruc {
+    int claCount;
     map<string, Log> logList;
 };
 struct ClaStruc {
-    unsigned int instID; // Instructor ID
+    string instUser; // Instructor username
     int stuCount;
-    vector<string> stuList;
+    set<unsigned int, greater<unsigned int>> stuSet;
 };
-class Logger {
+class Logger : public User {
 private:
-    struct info {
-        string ID;
-        short month;
-        short day;
-        short year;
-        short hrIn;
-        short minIn;
-        short time; // Time in minutes
-        //short hrOut;
-        //short minOut;
-    };
-    map<string, Log> ClassLst;
-    vector<int> claData; // Class Data
-    vector<int> sLogData; // Student log data
+    map<string, ClaStruc> ClassLst; // Class Data
+    map<string, ClaStruc>::iterator ClassItr; // Class Data Iterator
+    map<unsigned int, StuStruc> StDatLst;// Student Data
+    map<unsigned int, StuStruc>::iterator StDatItr;// Student Data Iterator
 public:
     Logger();
     //Logger(const Logger& orig);
     ~Logger();
-    void pushList(string, short, short, short, short, short);
     void calcTime(string, short, short);
     void runLog(unsigned int);
+    void dispStudentLog(unsigned int);
     void dispClasses();
+    void logPushToF();
+    void eraseLog(unsigned int, string, int);
 };
 
 #endif /* LOGGER_H */
